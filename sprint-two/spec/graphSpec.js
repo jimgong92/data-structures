@@ -56,5 +56,15 @@ describe('graph', function() {
     expect(graph.contains('hat')).to.equal(false);
     expect(graph.contains('jacket')).to.equal(false);
   });
+  it('should call callback on each node', function() {
+    var str = '';
+    graph.addNode('a');
+    graph.addNode('b');
+    graph.addNode('c', 'b');
+    graph.forEachNode(function(value) {
+      str += value;
+    });
+    expect(str).to.equal('abc');
+  })
 
 });

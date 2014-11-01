@@ -52,19 +52,30 @@ Graph.prototype.removeEdge = function(fromNode, toNode){
     fromEdges.splice(toIndex, 1);
     toEdges.splice(fromIndex, 1);
   }
+  if (fromEdges.length === 0) {
+    this.removeNode(fromNode);
+  }
+  if (toEdges.length === 0) {
+    this.removeNode(toNode);
+  }
 };
 
 Graph.prototype.forEachNode = function(callback, nodes){
   // nodes defaults to all the nodes
+  nodes = nodes || this._nodes;
+  _.each(nodes, function(node) {
+    callback(node.value);
+  });
 };
 
 Graph.prototype.size = function() {
-  return this._nodes.length;
+  return Object.keys(this._nodes).length;
 };
 
 Graph.prototype.createDefaultEdge = function() {
-  this.addEdge(this._nodes[0].value, this._nodes[1].value);
-}
+  var nodeKeys = Object.keys(this._nodes);
+  this.addEdge(this._nodes[nodeKeys[0]].value, this._nodes[nodeKeys[1]].value);
+};
 /*
  * Complexity: What is the time complexity of the above functions?
  */
