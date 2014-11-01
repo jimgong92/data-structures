@@ -3,25 +3,25 @@ var makeBinarySearchTree = function(value){
   node.left = null;
   node.right = null;
   node.value = value;
+  node.parent = null;
   return node;
 };
 
 makeBinarySearchTree.methods = {
   insert: function (value) {
-    // Short version
-    // var side = (this.value > value) ? 'left' : 'right';
-    // (this[side] === null) ? (this[side] = makeBinarySearchTree(value)) : this[side]['insert'](value);
-
-    // Long version
     if (this.value > value) {
       if (this.left === null) {
-        this.left = makeBinarySearchTree(value);
+        var newTree = makeBinarySearchTree(value);
+        newTree.parent = this;
+        this.left = newTree;
       } else {
         this.left.insert(value);
       }
     } else {
       if (this.right === null) {
-        this.right = makeBinarySearchTree(value);
+        var newTree = makeBinarySearchTree(value);
+        newTree.parent = this;
+        this.right = newTree;
       } else {
         this.right.insert(value);
       }
@@ -40,6 +40,30 @@ makeBinarySearchTree.methods = {
       if (node.right !== null) caller(node.right);
     }
     caller(this);
+  },
+  breadthFirstLog: function (callback) {
+    var depth = 0;
+    var maxDepth = this.getMaxDepth();
+    while (depth <= maxDepth) {
+      var nodes = this.getNodesAtDepth(depth);
+      for (var i = 0; i < nodes.length; i++) {
+        callback(nodes[i]);
+      }
+      depth++;
+    }
+  },
+  getNodesAtDepth: function (depth) {
+    var currentDepth = 0;
+    var nodes = [];
+    var sub = function (node) {
+      node
+    };
+    sub(this);
+
+  },
+  getDepthForNode: function() {
+    if (!this.parent) return 0;
+    return this.parent.getDepthForNode() + 1;
   }
 };
 
