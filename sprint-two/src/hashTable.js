@@ -2,7 +2,6 @@ var HashTable = function(){
   this._limit = 8;
   this._storage = makeLimitedArray(this._limit);
   this._size = 0;
-  console.log('==============New Hash Table=============')
 };
 
 HashTable.prototype.insert = function(k, v, rehash){
@@ -30,9 +29,7 @@ HashTable.prototype.insert = function(k, v, rehash){
 HashTable.prototype.retrieve = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
   var bucket = this._storage.get(i);
-  if (!bucket) {
-    return null;
-  }
+  if (!bucket) return null;
   else {
     var res = null;
     _.each(bucket, function(item) {
@@ -45,12 +42,10 @@ HashTable.prototype.retrieve = function(k){
 HashTable.prototype.remove = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
   var bucket = this._storage.get(i);
-  _.each(bucket, function(item, index, bucket) {
-    if (item[0] === k) {
-      bucket.splice(index, 1);
-    }
+  _.each(bucket, function(item, index) {
+    if (item[0] === k) bucket.splice(index, 1);
   });
-  if (bucket.length === 0) this._storage.set(i, null);
+  if (bucket.length === 0) bucket = null;
   this._size--;
   this.resize();
 };
@@ -58,10 +53,8 @@ HashTable.prototype.remove = function(k){
 HashTable.prototype.resize = function() {
   if (this._size/this._limit < 0.25) {
     this._limit /= 2;
-    console.log('decreasing size, limit goes from ', this._limit*2, ' to ', this._limit, ', size is ', this._size);
   } else if (this._size/this._limit > 0.75) {
     this._limit *= 2;
-    console.log('increasing size, limit goes from ', this._limit/2, ' to ', this._limit, ', size is ', this._size);
   } else {
     return;
   }
